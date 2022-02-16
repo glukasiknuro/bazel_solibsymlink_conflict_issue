@@ -1,18 +1,4 @@
-load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
-load(
-   "@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl",
-   "feature",
-   "flag_group",
-   "flag_set",
-   "tool_path",
-)
-
-all_link_actions = [
-    ACTION_NAMES.cpp_link_executable,
-    ACTION_NAMES.cpp_link_dynamic_library,
-    ACTION_NAMES.cpp_link_nodeps_dynamic_library,
-]
-
+load("@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl", "tool_path")
 
 def _impl(ctx):
     tool_paths = [
@@ -50,31 +36,8 @@ def _impl(ctx):
         ),
     ]
 
-    features = [
-        feature(
-            name = "default_linker_flags",
-            enabled = True,
-            flag_sets = [
-                flag_set(
-                    actions = all_link_actions,
-                    flag_groups = ([
-                        flag_group(
-                            flags = [
-                                "-lstdc++",
-                            ],
-                        ),
-                    ]),
-                ),
-            ],
-        ),
-    ]
-
     return cc_common.create_cc_toolchain_config_info(
         ctx = ctx,
-        cxx_builtin_include_directories = [
-           "/usr/lib/llvm-10/lib/clang/10.0.0/include",
-           "/usr/include",
-        ],
         toolchain_identifier = "k8-toolchain",
         host_system_name = "local",
         target_system_name = "local",

@@ -1,6 +1,8 @@
-load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@io_bazel_rules_docker//python:image.bzl", "py_image")
 
-cc_test(
-   name = "main_test",
-   srcs = ["main.cc"],
+py_image(
+    name = "test_py_image",
+    srcs = ["main.py"],
+    main = "main.py",
+    base = "@busybox//image",
 )
